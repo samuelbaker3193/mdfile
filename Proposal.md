@@ -121,7 +121,7 @@ Việc không giải quyết bài toán tương tác dẫn đến những hậu 
 ### **2.1. Tổng quan Kiến trúc**
 
 Giải pháp được thiết kế dựa trên kiến trúc serverless 100% trên AWS, lấy AWS AppSync làm trung tâm điều phối. Kiến trúc này đảm bảo khả năng mở rộng tự động, hiệu suất cao, bảo mật và tối ưu hóa chi phí.  
-![][image1]
+![image](https://github.com/samuelbaker3193/mdfile/blob/main/AppSync-LF-arch-diagram2-1.png?raw=true)
 
 *Sơ đồ 1: Kiến trúc tổng thể của Nền tảng Q\&A và Polling Real-time*
 
