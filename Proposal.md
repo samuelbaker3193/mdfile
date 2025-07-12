@@ -305,6 +305,87 @@ Tính toán được dựa trên một tháng hoạt động tiêu chuẩn tại
 ## **Phụ lục**
 
 ### **A. GraphQL Schema (schema.graphql)![][image2]**
+```typescript
+# Chi cho phép người dùng có quyền admin tạo câu hỏi và câu trả lời
+schema @aws_api(key: "aws_cognito_user_pools") {
+  # Binh nghia loai dlieu cho mot su kien
+  type Event {
+    id: ID!
+    name: String!
+    description: String
+    questions: [Question!]
+    polls: [Poll!]
+    createdAt: AWSDateTime!
+  }
+
+  # Binh nghia loai du lieu cho cau hoi
+  type Question {
+    id: ID!
+    eventId: ID!
+    content: String!
+    author: String # Lấy từ context của Cognito
+    upvotes: Int!
+    isAnswered: Boolean!
+    createdAt: AWSDateTime!
+  }
+
+  # Binh nghia loai cho mot cau bnh chon
+  type Poll {
+    id: ID!
+    eventId: ID!
+    questionText: String!
+    options: [PollOption!]!
+    isActive: Boolean!
+    totalVotes: Int!
+  }
+
+  type PollOption {
+    text: String!
+    votes: Int!
+  }
+
+  # Binh nghia cac hanh dong DOC du lieu
+  type Query {
+    # Lay thong tin chi tiet cua mot su kien
+    getEvent(id: ID!): Event
+  }
+
+  # Binh nghia cac hanh dong thay doi du lieu
+  type Mutation {
+    # Tao mot su kien moi (chi admin)
+    createEvent(name: String!, description: String): Event
+      @aws_auth(cognito_groups: ["admins"])
+
+    # Tao cau hoi moi
+    createQuestion(eventId: ID!, content: String!): Question!
+
+    # Upvote mot cau hoi
+    upvoteQuestion(questionId: ID!): Question!
+
+    # Dánh dau cau hoi da duoc tra loi (chi admin/moderator)
+    markQuestionAsAnswered(questionId: ID!, isAnswered: Boolean!): Question
+      @aws_auth(cognito_groups: ["admins", "moderators"])
+
+    # Tao mot cuoc bnh chon moi (chi admin/moderator)
+    createPoll(eventId: ID!, questionText: String!, options: [String!]!): Poll
+      @aws_auth(cognito_groups: ["admins", "moderators"])
+
+    # Ghi mot phieu bau
+    submitVote(pollId: ID!, optionText: String!): Poll
+  }
+
+  # Binh nghia cac kenh LANG NGHE su kien real-time
+  type Subscription {
+    # Lang nghe khi co mot hanh dong upvote trong mot su kien
+    onQuestionUpdated(eventId: ID!): Question
+      @aws_subscribe(mutations: ["createQuestion", "upvoteQuestion", "markQuestionAsAnswered"])
+
+    # Lang nghe khi ket qua poll thay doi trong mot su kien
+    onPollUpdated(eventId: ID!): Poll
+      @aws_subscribe(mutations: ["submitVote", "createPoll"])
+  }
+}
+```
 
 ### **B. Chi tiết Tính toán Chi phí**
 
