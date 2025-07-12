@@ -17,7 +17,7 @@
 Đây là phần giới thiệu về tài liệu.
 
 ### Mục đích
-![Văn bản thay thế]([đường_dẫn_đến_ảnh ] (https://aeonmall-review-rikkei.cdn.vccloud.vn/public/wp/16/news/ozGXG8fQ57daQZRQ6oRMzZKv67vEpK0axtTvORky.png) "Tiêu đề ảnh tùy chọn")
+![Văn bản thay thế]([[đường_dẫn_đến_ảnh](https://aeonmall-review-rikkei.cdn.vccloud.vn/public/wp/16/news/ozGXG8fQ57daQZRQ6oRMzZKv67vEpK0axtTvORky.png) ]  "Tiêu đề ảnh tùy chọn")
 
 Mục đích của tài liệu này là cung cấp hướng dẫn chi tiết.
 
