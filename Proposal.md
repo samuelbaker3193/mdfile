@@ -305,10 +305,11 @@ Tính toán được dựa trên một tháng hoạt động tiêu chuẩn tại
 ## **Phụ lục**
 
 ### **A. GraphQL Schema (schema.graphql)![][image2]**
-```typescript
-# Chi cho phép người dùng có quyền admin tạo câu hỏi và câu trả lời
-schema @aws_api(key: "aws_cognito_user_pools") {
-  # Binh nghia loai dlieu cho mot su kien
+```graphql
+# Chỉ cho phép người dùng đã xác thực qua Cognito truy cập API
+# Chỉ người dùng trong nhóm 'admins' mới có quyền thực hiện các thao tác quản trị
+schema @aws_api_key @aws_cognito_user_pools {
+  # Định nghĩa loại dữ liệu cho một sự kiện
   type Event {
     id: ID!
     name: String!
@@ -318,18 +319,18 @@ schema @aws_api(key: "aws_cognito_user_pools") {
     createdAt: AWSDateTime!
   }
 
-  # Binh nghia loai du lieu cho cau hoi
+  # Định nghĩa loại dữ liệu cho một câu hỏi
   type Question {
     id: ID!
     eventId: ID!
     content: String!
     author: String # Lấy từ context của Cognito
     upvotes: Int!
-    isAnswered: Boolean!
+    isAnswered: Boolean
     createdAt: AWSDateTime!
   }
 
-  # Binh nghia loai cho mot cau bnh chon
+  # Định nghĩa cho một cuộc bình chọn
   type Poll {
     id: ID!
     eventId: ID!
@@ -344,43 +345,43 @@ schema @aws_api(key: "aws_cognito_user_pools") {
     votes: Int!
   }
 
-  # Binh nghia cac hanh dong DOC du lieu
+  # Định nghĩa các hành động ĐỌC dữ liệu
   type Query {
-    # Lay thong tin chi tiet cua mot su kien
+    # Lấy thông tin chi tiết của một sự kiện
     getEvent(id: ID!): Event
   }
 
-  # Binh nghia cac hanh dong thay doi du lieu
+  # Định nghĩa các hành động THAY ĐỔI dữ liệu
   type Mutation {
-    # Tao mot su kien moi (chi admin)
+    # Tạo một sự kiện mới (chỉ admin)
     createEvent(name: String!, description: String): Event
       @aws_auth(cognito_groups: ["admins"])
 
-    # Tao cau hoi moi
-    createQuestion(eventId: ID!, content: String!): Question!
+    # Tạo một câu hỏi mới
+    createQuestion(eventId: ID!, content: String!): Question
 
-    # Upvote mot cau hoi
-    upvoteQuestion(questionId: ID!): Question!
-
-    # Dánh dau cau hoi da duoc tra loi (chi admin/moderator)
+    # Upvote một câu hỏi
+    upvoteQuestion(questionId: ID!): Question
+    
+    # Đánh dấu câu hỏi đã được trả lời (chỉ admin/moderator)
     markQuestionAsAnswered(questionId: ID!, isAnswered: Boolean!): Question
       @aws_auth(cognito_groups: ["admins", "moderators"])
 
-    # Tao mot cuoc bnh chon moi (chi admin/moderator)
+    # Tạo một cuộc bình chọn mới (chỉ admin/moderator)
     createPoll(eventId: ID!, questionText: String!, options: [String!]!): Poll
       @aws_auth(cognito_groups: ["admins", "moderators"])
 
-    # Ghi mot phieu bau
+    # Gửi một phiếu bầu
     submitVote(pollId: ID!, optionText: String!): Poll
   }
 
-  # Binh nghia cac kenh LANG NGHE su kien real-time
+  # Định nghĩa các kênh LẮNG NGHE sự kiện real-time
   type Subscription {
-    # Lang nghe khi co mot hanh dong upvote trong mot su kien
+    # Lắng nghe câu hỏi mới hoặc được upvote trong một sự kiện
     onQuestionUpdated(eventId: ID!): Question
       @aws_subscribe(mutations: ["createQuestion", "upvoteQuestion", "markQuestionAsAnswered"])
 
-    # Lang nghe khi ket qua poll thay doi trong mot su kien
+    # Lắng nghe khi kết quả poll thay đổi trong một sự kiện
     onPollUpdated(eventId: ID!): Poll
       @aws_subscribe(mutations: ["submitVote", "createPoll"])
   }
