@@ -15,7 +15,7 @@
 ## Giới thiệu
 
 Đây là phần giới thiệu về tài liệu.
-
+![tên ảnh](https://aeonmall-review-rikkei.cdn.vccloud.vn/public/wp/16/news/ozGXG8fQ57daQZRQ6oRMzZKv67vEpK0axtTvORky.png)
 ### Mục đích
 ![Văn bản thay thế](https://aeonmall-review-rikkei.cdn.vccloud.vn/public/wp/16/news/ozGXG8fQ57daQZRQ6oRMzZKv67vEpK0axtTvORky.png)  "Tiêu đề ảnh tùy chọn")
 
