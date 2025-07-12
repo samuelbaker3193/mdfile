@@ -4,7 +4,7 @@
 
 [Tối ưu hóa Tương tác và Đo lường Hiệu quả Sự kiện Trực tuyến bằng Kiến trúc Serverless	2](#heading=)
 
-[Tóm tắt Điều hành (Executive Summary)	2](#heading=)
+[Tóm tắt Điều hành (Executive Summary)	2](#Tóm-tắt-Điều-hành-(Executive-Summary))
 
 [1\. Phát biểu Bài toán (Problem Statement)	3](#heading=)
 
